@@ -1,0 +1,540 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lato:wght@300;400&display=swap');
+
+body {
+    background-color: #0d1117;
+    color: #c9d1d9;
+    font-family: 'Lato', sans-serif;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
+    perspective: 1000px;
+    box-shadow: inset 0 0 200px rgba(0, 0, 0, 0.9);
+    /* Heavy vignette */
+}
+
+/* Atmospheric Fog Animation */
+body::before,
+body::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 300%;
+    height: 100%;
+    background-image: url('https://raw.githubusercontent.com/danielstuart14/CSS_FOG_ANIMATION/master/fog1.png');
+    /* Public domain fog texture or similar css gradient */
+    background-size: cover;
+    opacity: 0.4;
+    z-index: -1;
+    animation: fogFlow 60s linear infinite;
+    pointer-events: none;
+}
+
+body::after {
+    background-image: url('https://raw.githubusercontent.com/danielstuart14/CSS_FOG_ANIMATION/master/fog2.png');
+    animation-duration: 40s;
+    opacity: 0.2;
+    animation-direction: reverse;
+}
+
+@keyframes fogFlow {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+/* Vignette Overlay */
+.vignette {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    box-shadow: inset 0 0 150px rgba(0, 0, 0, 0.9);
+    pointer-events: none;
+    z-index: 0;
+}
+
+h1.game-title {
+    font-family: 'Cinzel', serif;
+    font-size: 6rem;
+    letter-spacing: 0.5rem;
+    text-transform: uppercase;
+    color: #f0f0f0;
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+    margin-bottom: 3rem;
+    font-weight: 700;
+    opacity: 0.9;
+    animation: textFlicker 5s infinite alternate;
+}
+
+@keyframes textFlicker {
+    0% {
+        opacity: 0.9;
+        text-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+    }
+
+    50% {
+        opacity: 0.7;
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0);
+    }
+
+    100% {
+        opacity: 1;
+        text-shadow: 0 0 25px rgba(255, 255, 255, 0.2);
+    }
+}
+
+.container {
+    text-align: center;
+    z-index: 10;
+    position: relative;
+}
+
+/* Ethereal Buttons */
+.btn-cyber {
+    display: block;
+    width: 300px;
+    padding: 18px;
+    margin: 20px auto;
+    background: linear-gradient(90deg, rgba(0, 0, 0, 0) 0%, rgba(20, 20, 20, 0.8) 50%, rgba(0, 0, 0, 0) 100%);
+    border: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    color: #8b9bb4;
+    font-family: 'Cinzel', serif;
+    font-size: 1.3rem;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    transition: all 0.5s ease;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-cyber::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transition: 0.5s;
+}
+
+.btn-cyber:hover {
+    color: #fff;
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+    border-color: rgba(255, 255, 255, 0.4);
+    background: linear-gradient(90deg, rgba(0, 0, 0, 0) 0%, rgba(40, 40, 40, 0.9) 50%, rgba(0, 0, 0, 0) 100%);
+}
+
+.btn-cyber:hover::before {
+    left: 100%;
+}
+
+/* Custom Modal Styles */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(5px);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+}
+
+.custom-modal {
+    background: linear-gradient(135deg, #1a202c, #0d1117);
+    padding: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+    font-family: 'Cinzel', serif;
+}
+
+.modal-overlay.active .custom-modal {
+    transform: scale(1);
+}
+
+.modal-title {
+    color: #e2e8f0;
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 10px;
+}
+
+.modal-message {
+    color: #a0aec0;
+    font-family: 'Lato', sans-serif;
+    margin-bottom: 25px;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.modal-btn {
+    padding: 10px 25px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: transparent;
+    color: #fff;
+    cursor: pointer;
+    font-family: 'Cinzel', serif;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+}
+
+.modal-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: #fff;
+}
+
+.modal-btn.confirm {
+    color: #ff6b6b;
+    border-color: rgba(255, 107, 107, 0.3);
+}
+
+.modal-btn.confirm:hover {
+    background: rgba(255, 107, 107, 0.1);
+    border-color: #ff6b6b;
+}
+
+/* Start Screen Specifics */
+.start-btn-container {
+    margin-top: 50px;
+}
+
+.click-to-begin {
+    margin-top: 20px;
+    font-size: 0.9rem;
+    color: #555;
+    letter-spacing: 2px;
+    opacity: 0.7;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 0.4;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0.4;
+    }
+}
+
+/* Forms */
+.form-container {
+    background: rgba(0, 0, 0, 0.6);
+    padding: 40px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    width: 350px;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+}
+
+.form-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #aaa;
+    font-size: 0.9rem;
+    font-family: 'Cinzel', serif;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #fff;
+    font-family: 'Lato', sans-serif;
+    box-sizing: border-box;
+    /* Fixes padding issue */
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: #888;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.error-msg {
+    color: #ff6b6b;
+    font-size: 0.85rem;
+    margin-top: 5px;
+}
+
+.back-link {
+    display: block;
+    margin-top: 20px;
+    color: #666;
+    text-decoration: none;
+    font-size: 0.8rem;
+}
+
+.back-link:hover {
+    color: #999;
+}
+
+/* Table */
+table {
+    width: 80%;
+    margin: 20px auto;
+    border-collapse: collapse;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+th,
+td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+th {
+    background: rgba(255, 255, 255, 0.05);
+    font-family: 'Cinzel', serif;
+    color: #ddd;
+}
+
+td {
+    color: #aaa;
+}
+
+/* Mode Selection Screen */
+.mode-selection {
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+    margin-top: 50px;
+}
+
+.mode-card {
+    width: 200px;
+    height: 200px;
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    position: relative;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+.mode-card::before {
+    content: "";
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all 0.3s ease;
+}
+
+.mode-card:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+}
+
+.mode-card:hover::before {
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.mode-card span {
+    color: #e0e0e0;
+    font-family: 'Cinzel', serif;
+    font-size: 1.2rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-align: center;
+    z-index: 2;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.back-link-bottom {
+    display: block;
+    margin-top: 60px;
+    color: #445;
+    font-family: 'Cinzel', serif;
+    text-decoration: none;
+    font-size: 1rem;
+    letter-spacing: 1px;
+    opacity: 0.6;
+    transition: opacity 0.3s;
+}
+
+
+/* Game HUD / Status Screen */
+.game-ui-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    /* Let clicks pass through to potential game canvas behind */
+    box-sizing: border-box;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    pointer-events: auto;
+}
+
+/* Status Bars (Left) */
+.status-section {
+    width: 300px;
+    padding-top: 10px;
+}
+
+.status-label {
+    font-family: 'Cinzel', serif;
+    color: #889;
+    font-size: 0.9rem;
+    letter-spacing: 2px;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+}
+
+.bar-container {
+    width: 100%;
+    height: 10px;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 15px;
+    position: relative;
+}
+
+.bar-fill {
+    height: 100%;
+    background: #ccc;
+    width: 100%;
+    transition: width 0.5s ease;
+}
+
+.health-val {
+    font-family: 'Cinzel', serif;
+    font-size: 0.8rem;
+    color: #667;
+    margin-bottom: 15px;
+    display: block;
+}
+
+/* Controls (Right) */
+.controls-section {
+    display: flex;
+    gap: 20px;
+}
+
+.control-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.control-btn {
+    width: 50px;
+    height: 50px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #ccc;
+    font-size: 1.2rem;
+    cursor: pointer;
+    margin-bottom: 5px;
+    transition: all 0.2s;
+}
+
+.control-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: #fff;
+}
+
+.control-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    color: #667;
+    letter-spacing: 1px;
+}
+
+/* Bottom notifications */
+.bottom-bar {
+    position: relative;
+    pointer-events: auto;
+    display: flex;
+    justify-content: center;
+    /* Centers the main instruction */
+}
+
+.demo-menu-btn {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(0, 0, 0, 0.4);
+    padding: 15px 20px;
+    color: #445;
+    text-decoration: none;
+    font-family: 'Cinzel', serif;
+    font-size: 0.8rem;
+    transition: color 0.3s;
+}
+
+.demo-menu-btn:hover {
+    color: #aaa;
+    background: rgba(255, 255, 255, 0.05);
+}
