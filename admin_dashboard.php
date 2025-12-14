@@ -2,7 +2,6 @@
 session_start();
 require 'konek.php';
 
-// Check if admin
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
     header("Location: main_menu.php");
     exit;
@@ -100,7 +99,6 @@ $result = mysqli_query($conn, $query);
         </div>
     </div>
 
-    <!-- Custom Modal -->
     <div id="confirmation-modal" class="modal-overlay">
         <div class="custom-modal">
             <div class="modal-title">WARNING</div>

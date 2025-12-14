@@ -1,8 +1,5 @@
 <?php
 session_start();
-// This page is accessible always, or strictly for logged in?
-// Usually New Game implies a signed in user for saves, but for guest it might redirect to login later.
-// For now, I'll allow access but checks might happen on click.
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -19,14 +16,11 @@ session_start();
         <h1 class="game-title" style="font-size: 4rem; letter-spacing: 0.8rem;">CHOOSE MODE</h1>
 
         <div class="mode-selection">
-            <!-- New Game Card -->
-            <!-- Linking to actual game view now -->
             <a href="game.php?mode=new" class="mode-card"
                 onclick="confirmAction(event, 'game.php?mode=new', 'WARNING: Starting a new game will overwrite your existing save. Continue?');">
                 <span>NEW GAME</span>
             </a>
 
-            <!-- Load Game Card -->
             <a href="saves.php" class="mode-card">
                 <span>LOAD GAME</span>
             </a>
@@ -57,7 +51,6 @@ session_start();
             e.preventDefault();
 
             if (!isLoggedIn) {
-                // User not logged in - Show Login Prompt
                 modalTitle.innerText = "ACCESS DENIED";
                 msgText.innerText = "You must be logged in to enter the game world.";
                 confirmBtn.innerText = "LOGIN";
@@ -65,7 +58,6 @@ session_start();
                     window.location.href = 'login.php';
                 };
             } else {
-                // User logged in - Show Confirmation
                 modalTitle.innerText = "NEW GAME";
                 msgText.innerText = message;
                 confirmBtn.innerText = "START";

@@ -88,10 +88,8 @@ function deleteAccount($user_id)
 {
     global $conn;
 
-    // Hapus data save game terlebih dahulu
     mysqli_query($conn, "DELETE FROM game_saves WHERE user_id = $user_id");
 
-    // Hapus user
     $query = "DELETE FROM users WHERE id = $user_id";
 
     return mysqli_query($conn, $query);

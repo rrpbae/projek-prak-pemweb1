@@ -22,20 +22,17 @@ session_start();
         <h1 class="game-title">JeRaDar</h1>
 
         <div class="menu-items">
-            <!-- Game options -->
             <a href="new_game.php" class="btn-cyber">New Game</a>
             <a href="saves.php" class="btn-cyber">Load Game</a>
 
             <?php if (isset($_SESSION['user_id'])): ?>
-                <!-- Logged in state -->
-                <!-- Welcome message moved to top of page -->
+              
                 <?php if ($_SESSION['role'] == 'admin'): ?>
                     <a href="admin_dashboard.php" class="btn-cyber">Admin Dashboard</a>
                 <?php endif; ?>
                 <a href="logout.php" class="btn-cyber"
                     onclick="confirmAction(event, 'logout.php', 'Apakah anda yakin ingin Logout?');">Logout</a>
             <?php else: ?>
-                <!-- Guest state -->
                 <a href="login.php" class="btn-cyber">Login</a>
                 <a href="register.php" class="btn-cyber">Register</a>
             <?php endif; ?>
@@ -64,14 +61,11 @@ session_start();
             e.preventDefault();
             msgText.innerText = message;
 
-            // Setup confirm button
             confirmBtn.onclick = function () {
                 window.location.href = url;
             };
 
-            // Show
             modal.style.display = 'flex';
-            // Slight delay for transition
             setTimeout(() => modal.classList.add('active'), 10);
         }
 

@@ -2,7 +2,6 @@
 session_start();
 require 'konek.php';
 
-// Redirect if not logged in
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit;

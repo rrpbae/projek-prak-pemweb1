@@ -29,7 +29,6 @@ if (isset($_GET['mode']) && $_GET['mode'] == 'new') {
     <title>JeRaDar - In Game</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        /* Additional gradient for the health bar as per image hint */
         #health-bar .bar-fill {
             background: linear-gradient(90deg, #999, #eee);
         }
@@ -37,10 +36,7 @@ if (isset($_GET['mode']) && $_GET['mode'] == 'new') {
         #stamina-bar .bar-fill {
             background: linear-gradient(90deg, #555, #999);
             width: 70%;
-            /* Initial state from image */
         }
-
-        /* Save Status Notification */
         #save-status {
             position: fixed;
             top: 20px;
@@ -60,13 +56,10 @@ if (isset($_GET['mode']) && $_GET['mode'] == 'new') {
 <body>
     <div id="save-status">Saving...</div>
 
-    <!-- Limbo-like Game Canvas -->
     <canvas id="gameCanvas" style="position: absolute; top:0; left:0; z-index: 0;"></canvas>
 
     <div class="game-ui-container">
-        <!-- Top Bar -->
         <div class="top-bar">
-            <!-- Status Section (Top Left) -->
             <div class="status-section">
                 <div class="status-label">Health</div>
                 <div class="bar-container" id="health-bar">
@@ -80,10 +73,7 @@ if (isset($_GET['mode']) && $_GET['mode'] == 'new') {
                     <div class="bar-fill" style="width: 100%;"></div>
                 </div>
             </div>
-
-            <!-- Controls Section (Top Right) -->
             <div class="controls-section">
-                <!-- Removed simulation toggles as they are not relevant to active gameplay anymore -->
                 <div class="control-group" onclick="saveProgress()">
                     <div class="control-btn" title="Save Game" style="font-size: 0.8rem;">💾</div>
                     <div class="control-label">SAVE</div>
@@ -94,8 +84,6 @@ if (isset($_GET['mode']) && $_GET['mode'] == 'new') {
                 </div>
             </div>
         </div>
-
-        <!-- Bottom Bar -->
         <div class="bottom-bar">
             <div class="pause-instruction" id="instruction-text">Space / Click to Jump | ESC to Pause</div>
             <a href="main_menu.php" class="demo-menu-btn">[Kembali Ke Menu]</a>
@@ -103,11 +91,9 @@ if (isset($_GET['mode']) && $_GET['mode'] == 'new') {
     </div>
 
     <script>
-        // Game State from PHP
         let currentLevel = <?php echo $level; ?>;
         let currentScore = <?php echo $score; ?>;
 
-        // Visual Elements
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
         const healthBar = document.querySelector('#health-bar .bar-fill');
@@ -115,7 +101,7 @@ if (isset($_GET['mode']) && $_GET['mode'] == 'new') {
         const healthText = document.querySelector('.health-val');
         const instructionText = document.getElementById('instruction-text');
 
-        // Game Variables
+
         let gameRunning = true;
         let health = 100;
         let stamina = 100;
@@ -124,12 +110,12 @@ if (isset($_GET['mode']) && $_GET['mode'] == 'new') {
         let gravity = 0.6;
         let frame = 0;
 
-        // Player Object
+
         const player = {
             x: 150,
             y: 0,
             width: 30,
-            height: 40, // Taller player
+            height: 40, 
             dy: 0,
             jumpPower: -13,
             grounded: false,
@@ -149,7 +135,7 @@ if (isset($_GET['mode']) && $_GET['mode'] == 'new') {
         window.addEventListener('resize', resize);
         resize();
 
-        // Parallax Scenery Init
+
         for (let i = 0; i < 20; i++) {
             scenery.push({
                 x: Math.random() * canvas.width,
@@ -161,7 +147,7 @@ if (isset($_GET['mode']) && $_GET['mode'] == 'new') {
             });
         }
 
-        // Input
+      
         document.addEventListener('keydown', (e) => {
             if (e.code === 'Space') jump();
             if (e.code === 'Escape') togglePause();
@@ -175,13 +161,13 @@ if (isset($_GET['mode']) && $_GET['mode'] == 'new') {
                 player.dy = player.jumpPower;
                 player.grounded = false;
                 stamina -= 15;
-                createParticles(player.x + 15, player.y + 40, 5, '#555'); // Dust jump
+                createParticles(player.x + 15, player.y + 40, 5, '#555'); 
                 updateUI();
             }
         }
 
         function togglePause() {
-            if (health <= 0) return; // Prevent unpausing if dead
+            if (health <= 0) return; 
 
             gameRunning = !gameRunning;
             if (gameRunning) {
@@ -211,63 +197,58 @@ if (isset($_GET['mode']) && $_GET['mode'] == 'new') {
             }
         }
 
-        // Game Loop
+        
         function loop() {
             if (!gameRunning) return;
 
             frame++;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // 1. Draw Background (Parallax) - LIGHTER
+            
             const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
-            gradient.addColorStop(0, '#2d3748'); // Brighter dark/grey
+            gradient.addColorStop(0, '#2d3748'); 
             gradient.addColorStop(1, '#1a202c');
             ctx.fillStyle = gradient;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            // Draw Distant Fog - BRIGHTER
+            
             ctx.fillStyle = 'rgba(255,255,255,0.05)';
             ctx.beginPath();
             ctx.arc(canvas.width / 2, canvas.height / 2, 400, 0, Math.PI * 2);
             ctx.fill();
 
-            // Draw Scenery (Trees/Pillars in background)
-            ctx.fillStyle = '#171923'; // Visible silhouette
+            
+            ctx.fillStyle = '#171923'; 
             scenery.forEach(item => {
                 item.x -= item.speed;
                 if (item.x + item.w < 0) item.x = canvas.width + Math.random() * 200;
-
-                // Draw spooky tree/pillar
                 ctx.fillRect(item.x, item.y, item.w, item.h);
-                // Branches
                 if (item.type === 'tree' && Math.random() > 0.99) {
-                    // small detail
+                
                 }
             });
 
-            // 2. Draw Ground
+           
             const groundY = canvas.height - 100;
-            ctx.fillStyle = '#000'; // Pure black foreground
+            ctx.fillStyle = '#000'; 
             ctx.fillRect(0, groundY, canvas.width, 100);
 
-            // 3. Player Logic
+           
             player.dy += gravity;
             player.y += player.dy;
 
-            // Ground Collision
+            
             if (player.y + player.height > groundY) {
                 player.y = groundY - player.height;
                 player.dy = 0;
                 player.grounded = true;
-                // Running particles
                 if (frame % 10 === 0) createParticles(player.x, player.y + 40, 1, '#333');
             }
 
-            // Draw Player
-            ctx.fillStyle = '#111'; // Almost black
+
+            ctx.fillStyle = '#111';
             ctx.fillRect(player.x, player.y, player.width, player.height);
 
-            // Eyes (The Soul)
             ctx.fillStyle = '#fff';
             ctx.shadowBlur = 10;
             ctx.shadowColor = '#fff';
@@ -276,9 +257,6 @@ if (isset($_GET['mode']) && $_GET['mode'] == 'new') {
                 ctx.fillRect(player.x + 25, player.y + 10, 3, 3);
             }
             ctx.shadowBlur = 0;
-
-            // 4. Obstacle Logic
-            // Spawn Rate Logic
             let spawnRate = 120;
             if (score > 500) spawnRate = 90;
             if (score > 1500) spawnRate = 60;
@@ -300,7 +278,7 @@ if (isset($_GET['mode']) && $_GET['mode'] == 'new') {
                     obs.width = 30;
                 } else if (type > 0.3) {
                     obs.type = 'blade';
-                    obs.y = groundY - 80; // Flying hazard
+                    obs.y = groundY - 80;
                 }
 
                 obstacles.push(obs);
@@ -310,7 +288,7 @@ if (isset($_GET['mode']) && $_GET['mode'] == 'new') {
                 let obs = obstacles[i];
                 obs.x -= gameSpeed;
 
-                ctx.fillStyle = '#000'; // Obstacles are also silhouettes
+                ctx.fillStyle = '#000'; 
                 ctx.strokeStyle = '#333';
                 ctx.lineWidth = 1;
 
@@ -334,20 +312,18 @@ if (isset($_GET['mode']) && $_GET['mode'] == 'new') {
                     ctx.strokeRect(obs.x, obs.y, obs.width, obs.height);
                 }
 
-                // Collision
                 if (
                     player.x < obs.x + obs.width &&
                     player.x + player.width > obs.x &&
                     player.y < obs.y + obs.height &&
                     player.y + player.height > obs.y
                 ) {
-                    health -= 34; // 3 hits effectively
-                    createParticles(player.x, player.y, 20, '#ff0000'); // Blood/Spark
+                    health -= 34; 
+                    createParticles(player.x, player.y, 20, '#ff0000'); 
                     obstacles.splice(i, 1);
                     i--;
                     updateUI();
 
-                    // Camera Shake
                     canvas.style.transform = `translate(${Math.random() * 20 - 10}px, ${Math.random() * 20 - 10}px)`;
                     setTimeout(() => canvas.style.transform = 'translate(0,0)', 100);
 
@@ -362,13 +338,9 @@ if (isset($_GET['mode']) && $_GET['mode'] == 'new') {
                     i--;
                     score += 10;
                     currentScore = score;
-
-                    // Speed up slightly over time
                     if (score % 500 === 0) gameSpeed += 0.5;
                 }
             }
-
-            // 5. Particles Logic
             for (let i = 0; i < particles.length; i++) {
                 let p = particles[i];
                 p.x += p.vx;
@@ -386,13 +358,12 @@ if (isset($_GET['mode']) && $_GET['mode'] == 'new') {
                 }
             }
 
-            // Stamina Regen
             if (stamina < 100 && frame % 5 === 0) {
-                stamina += 0.5; // Slower regen
+                stamina += 0.5; 
                 updateUI();
             }
 
-            // UI Text
+           
             ctx.fillStyle = '#666';
             ctx.font = '20px Cinzel';
             ctx.fillText('Score: ' + score, 40, canvas.height - 40);
@@ -421,17 +392,16 @@ if (isset($_GET['mode']) && $_GET['mode'] == 'new') {
             canvas.addEventListener('click', () => location.reload(), { once: true });
         }
 
-        // Update HTML UI
+        
         function updateUI() {
             healthBar.style.width = health + '%';
             healthText.innerText = Math.floor(health) + '%';
             staminaBar.style.width = stamina + '%';
         }
 
-        // Start
+        
         loop();
 
-        // AJAX Save Function
         function saveProgress() {
             const statusDiv = document.getElementById('save-status');
             statusDiv.style.display = 'block';
@@ -441,7 +411,7 @@ if (isset($_GET['mode']) && $_GET['mode'] == 'new') {
             const formData = new FormData();
             formData.append('action', 'save');
             formData.append('level', currentLevel);
-            formData.append('score', score); // Use live game score
+            formData.append('score', score); 
 
             fetch('game_action.php', {
                 method: 'POST',
@@ -449,7 +419,7 @@ if (isset($_GET['mode']) && $_GET['mode'] == 'new') {
             })
                 .then(response => response.text())
                 .then(data => {
-                    statusDiv.innerText = data; // Show server response
+                    statusDiv.innerText = data; 
                     setTimeout(() => {
                         statusDiv.style.display = 'none';
                     }, 3000);
