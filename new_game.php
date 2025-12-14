@@ -21,7 +21,8 @@ session_start();
         <div class="mode-selection">
             <!-- New Game Card -->
             <!-- Linking to actual game view now -->
-            <a href="game.php?mode=new" class="mode-card">
+            <a href="game.php?mode=new" class="mode-card"
+                onclick="confirmAction(event, 'game.php?mode=new', 'WARNING: Starting a new game will overwrite your existing save. Continue?');">
                 <span>NEW GAME</span>
             </a>
 
@@ -33,6 +34,55 @@ session_start();
 
         <a href="main_menu.php" class="back-link-bottom">Back to Menu</a>
     </div>
+    <div id="confirmation-modal" class="modal-overlay">
+        <div class="custom-modal">
+            <div class="modal-title">NEW GAME</div>
+            <div class="modal-message" id="modal-msg-text">Start a fresh journey? Your previous progress will be reset.
+            </div>
+            <div class="modal-actions">
+                <button class="modal-btn" onclick="closeModal()">CANCEL</button>
+                <button class="modal-btn confirm" id="modal-confirm-btn">START</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const modal = document.getElementById('confirmation-modal');
+        const msgText = document.getElementById('modal-msg-text');
+        const confirmBtn = document.getElementById('modal-confirm-btn');
+        const modalTitle = document.querySelector('.modal-title');
+        const isLoggedIn = <?php echo isset($_SESSION['user_id']) ? 'true' : 'false'; ?>;
+
+        function confirmAction(e, url, message) {
+            e.preventDefault();
+
+            if (!isLoggedIn) {
+                // User not logged in - Show Login Prompt
+                modalTitle.innerText = "ACCESS DENIED";
+                msgText.innerText = "You must be logged in to enter the game world.";
+                confirmBtn.innerText = "LOGIN";
+                confirmBtn.onclick = function () {
+                    window.location.href = 'login.php';
+                };
+            } else {
+                // User logged in - Show Confirmation
+                modalTitle.innerText = "NEW GAME";
+                msgText.innerText = message;
+                confirmBtn.innerText = "START";
+                confirmBtn.onclick = function () {
+                    window.location.href = url;
+                };
+            }
+
+            modal.style.display = 'flex';
+            setTimeout(() => modal.classList.add('active'), 10);
+        }
+
+        function closeModal() {
+            modal.classList.remove('active');
+            setTimeout(() => modal.style.display = 'none', 300);
+        }
+    </script>
 </body>
 
 </html>
